@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagementReservation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210314004827_addreservationTabes")]
-    partial class addreservationTabes
+    [Migration("20210314224149_pls")]
+    partial class pls
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -121,31 +121,30 @@ namespace ManagementReservation.Migrations
 
             modelBuilder.Entity("ManagementReservation.Models.Reservation", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("IdType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdUser")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<string>("cause")
+                    b.Property<string>("Cause")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTime>("date")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("status")
+                    b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.HasKey("id");
+                    b.Property<int>("TypeReserveId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("IdType")
-                        .IsUnique();
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.HasIndex("IdUser");
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeReserveId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reservation");
                 });
@@ -191,19 +190,19 @@ namespace ManagementReservation.Migrations
                     b.ToTable("Roleclaim");
                 });
 
-            modelBuilder.Entity("ManagementReservation.Models.TypeReservation", b =>
+            modelBuilder.Entity("ManagementReservation.Models.Typereservation", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("accessNumber")
+                    b.Property<int>("AccessNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("TypeReservation");
                 });
@@ -482,17 +481,17 @@ namespace ManagementReservation.Migrations
 
             modelBuilder.Entity("ManagementReservation.Models.Reservation", b =>
                 {
-                    b.HasOne("ManagementReservation.Models.TypeReservation", "TypeReservation")
-                        .WithOne("Reservation")
-                        .HasForeignKey("ManagementReservation.Models.Reservation", "IdType")
+                    b.HasOne("ManagementReservation.Models.Typereservation", "TypeReserve")
+                        .WithMany()
+                        .HasForeignKey("TypeReserveId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ManagementReservation.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("IdUser");
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("TypeReservation");
+                    b.Navigation("TypeReserve");
 
                     b.Navigation("User");
                 });
@@ -597,14 +596,11 @@ namespace ManagementReservation.Migrations
                     b.Navigation("Userroles");
                 });
 
-            modelBuilder.Entity("ManagementReservation.Models.TypeReservation", b =>
-                {
-                    b.Navigation("Reservation");
-                });
-
             modelBuilder.Entity("ManagementReservation.Models.User", b =>
                 {
                     b.Navigation("Aspnetuserclaims");
+
+                    b.Navigation("Reservations");
 
                     b.Navigation("Userlogins");
 

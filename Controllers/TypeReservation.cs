@@ -1,10 +1,12 @@
 ﻿using ManagementReservation.Data;
+using ManagementReservation.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace ManagementReservation.Controllers
 {
@@ -38,7 +40,7 @@ namespace ManagementReservation.Controllers
         // POST: TypeReservation/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Models.TypeReservation TypeReservation)
+        public async Task<IActionResult> Create(Models.Typereservation TypeReservation)
         {
             try
             {
@@ -62,7 +64,7 @@ namespace ManagementReservation.Controllers
         // POST: TypeReservation/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Models.TypeReservation TypeReservation)
+        public async Task<IActionResult> Edit(int id, Models.Typereservation TypeReservation)
         {
             try
             {
@@ -86,7 +88,7 @@ namespace ManagementReservation.Controllers
         // POST: TypeReservation/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, Models.TypeReservation TypeReservation)
+        public async Task<IActionResult> Delete(int id, Models.Typereservation TypeReservation)
         {
             try
             {

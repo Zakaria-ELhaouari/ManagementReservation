@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace ManagementReservation.Models
 {
-    public class Reservation
+    public partial class Reservation
     {
-        public int id { get; set; }
-        public DateTime date { get; set; }
-        public bool status { get; set; }
-        public string cause { get; set; }
-        public string IdUser { get; set; }
-        [ForeignKey(nameof(IdUser))]
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public bool Status { get; set; }
+        public string Cause { get; set; }
+
+        public int TypeReserveId { get; set; }
+        public virtual Typereservation TypeReserve { get; set; }
+        public string UserId { get; set; }
         public virtual User User { get; set; }
-        public int TypReserve { get; set; }
-        [ForeignKey(nameof(TypReserve))]
-        public virtual TypeReservation TypeReservation { get; set; }
     }
 }

@@ -17,10 +17,12 @@ namespace ManagementReservation.Models
         {
         }
 
-        public virtual DbSet<Aspnetuserclaim> Aspnetuserclaims { get; set; }
+        
         public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
+        public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Roleclaim> Roleclaims { get; set; }
+        public virtual DbSet<Typereservation> Typereservations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Userlogin> Userlogins { get; set; }
         public virtual DbSet<Userrole> Userroles { get; set; }
@@ -39,9 +41,9 @@ namespace ManagementReservation.Models
         {
             modelBuilder.Entity<Aspnetuserclaim>(entity =>
             {
-                entity.ToTable("aspnetuserclaims");
+                entity.ToTable("aspnetuserclaim");
 
-                entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+                entity.HasIndex(e => e.UserId, "IX_Aspnetuserclaim_UserId");
 
                 entity.Property(e => e.Id).HasColumnType("int(11)");
 
@@ -56,7 +58,6 @@ namespace ManagementReservation.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UserId)
-                    .IsRequired()
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -64,8 +65,10 @@ namespace ManagementReservation.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Aspnetuserclaims)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_AspNetUserClaims_Users_UserId");
+                    .HasConstraintName("FK_Aspnetuserclaim_User_UserId");
             });
+
+           
 
             modelBuilder.Entity<Efmigrationshistory>(entity =>
             {
@@ -86,12 +89,37 @@ namespace ManagementReservation.Models
                     .HasCollation("utf8mb4_general_ci");
             });
 
+            modelBuilder.Entity<Reservation>(entity =>
+            {
+                entity.ToTable("reservation");
+
+                
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Cause)
+                    .HasColumnType("longtext")
+                    .HasColumnName("cause")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Date)
+                    .HasMaxLength(6)
+                    .HasColumnName("date");
+
+                
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+
+               
+            });
+
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.ToTable("roles");
-
-                entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
-                    .IsUnique();
+                entity.ToTable("role");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("varchar(255)")
@@ -104,21 +132,23 @@ namespace ManagementReservation.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Name)
-                    .HasColumnType("varchar(256)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.NormalizedName)
-                    .HasColumnType("varchar(256)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
             });
 
+           
+
             modelBuilder.Entity<Roleclaim>(entity =>
             {
-                entity.ToTable("roleclaims");
+                entity.ToTable("roleclaim");
 
-                entity.HasIndex(e => e.RoleId, "IX_RoleClaims_RoleId");
+                entity.HasIndex(e => e.RoleId, "IX_Roleclaim_RoleId");
 
                 entity.Property(e => e.Id).HasColumnType("int(11)");
 
@@ -133,7 +163,6 @@ namespace ManagementReservation.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.RoleId)
-                    .IsRequired()
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -141,17 +170,33 @@ namespace ManagementReservation.Models
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Roleclaims)
                     .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_RoleClaims_Roles_RoleId");
+                    .HasConstraintName("FK_Roleclaim_Role_RoleId");
+            });
+
+            
+
+            modelBuilder.Entity<Typereservation>(entity =>
+            {
+                entity.ToTable("typereservation");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.AccessNumber)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("accessNumber");
+
+                entity.Property(e => e.Name)
+                    .HasColumnType("longtext")
+                    .HasColumnName("name")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("users");
-
-                entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
-
-                entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
-                    .IsUnique();
+                entity.ToTable("user");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("varchar(255)")
@@ -171,18 +216,16 @@ namespace ManagementReservation.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Email)
-                    .HasColumnType("varchar(256)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.FirstName)
-                    .IsRequired()
                     .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.LastName)
-                    .IsRequired()
                     .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -190,12 +233,12 @@ namespace ManagementReservation.Models
                 entity.Property(e => e.LockoutEnd).HasMaxLength(6);
 
                 entity.Property(e => e.NormalizedEmail)
-                    .HasColumnType("varchar(256)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.NormalizedUserName)
-                    .HasColumnType("varchar(256)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -217,28 +260,23 @@ namespace ManagementReservation.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.UserName)
-                    .HasColumnType("varchar(256)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
             });
 
+            
+
             modelBuilder.Entity<Userlogin>(entity =>
             {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                entity.ToTable("userlogin");
 
-                entity.ToTable("userlogins");
+                entity.HasIndex(e => e.UserId, "IX_Userlogin_UserId");
 
-                entity.HasIndex(e => e.UserId, "IX_UserLogins_UserId");
+                entity.Property(e => e.Id).HasColumnType("int(11)");
 
                 entity.Property(e => e.LoginProvider)
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
-
-                entity.Property(e => e.ProviderKey)
-                    .HasColumnType("varchar(255)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -247,8 +285,12 @@ namespace ManagementReservation.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
+                entity.Property(e => e.ProviderKey)
+                    .HasColumnType("longtext")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
                 entity.Property(e => e.UserId)
-                    .IsRequired()
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -256,25 +298,27 @@ namespace ManagementReservation.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Userlogins)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UserLogins_Users_UserId");
+                    .HasConstraintName("FK_Userlogin_User_UserId");
             });
+
+            
 
             modelBuilder.Entity<Userrole>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                entity.ToTable("userrole");
 
-                entity.ToTable("userroles");
+                entity.HasIndex(e => e.RoleId, "IX_Userrole_RoleId");
 
-                entity.HasIndex(e => e.RoleId, "IX_UserRoles_RoleId");
+                entity.HasIndex(e => e.UserId, "IX_Userrole_UserId");
 
-                entity.Property(e => e.UserId)
+                entity.Property(e => e.Id).HasColumnType("int(11)");
+
+                entity.Property(e => e.RoleId)
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.RoleId)
+                entity.Property(e => e.UserId)
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -282,33 +326,35 @@ namespace ManagementReservation.Models
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Userroles)
                     .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_UserRoles_Roles_RoleId");
+                    .HasConstraintName("FK_Userrole_Role_RoleId");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Userroles)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UserRoles_Users_UserId");
+                    .HasConstraintName("FK_Userrole_User_UserId");
             });
+
+           
 
             modelBuilder.Entity<Usertoken>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0, 0 });
+                entity.ToTable("usertoken");
 
-                entity.ToTable("usertokens");
+                entity.HasIndex(e => e.UserId, "IX_Usertoken_UserId");
 
-                entity.Property(e => e.UserId)
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.Property(e => e.Id).HasColumnType("int(11)");
 
                 entity.Property(e => e.LoginProvider)
-                    .HasColumnType("varchar(255)")
+                    .HasColumnType("longtext")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Name)
+                    .HasColumnType("longtext")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.UserId)
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
@@ -321,8 +367,10 @@ namespace ManagementReservation.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Usertokens)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UserTokens_Users_UserId");
+                    .HasConstraintName("FK_Usertoken_User_UserId");
             });
+
+            
 
             OnModelCreatingPartial(modelBuilder);
         }

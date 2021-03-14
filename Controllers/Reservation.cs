@@ -20,15 +20,14 @@ namespace ManagementReservation.Controllers
         // GET: Reservation
         public ActionResult Index(string sortOrder)
         {
-            var allReserve = _context.Reservation.
-                Include(x => x.TypeReservation)
-                .Include(x => x.User)
+            var allReserve = _context.Reservation
+                .Include(x => x.TypeReserve)
                 .ToList();
             ViewBag.sortDate = String.IsNullOrEmpty(sortOrder) ? "date_sort" : "";
             switch (sortOrder)
             {
                 case "date_sort":
-                    allReserve = _context.Reservation.OrderBy(b => b.date).ToList();
+                    allReserve = _context.Reservation.OrderBy(b => b.Date).ToList();
                     break;
                 default:
                     allReserve = _context.Reservation.ToList();
@@ -46,8 +45,8 @@ namespace ManagementReservation.Controllers
         // GET: Reservation/Create
         public ActionResult Create()
         {
-            var type = _context.TypeReservation.ToList();
-            ViewBag.TypeReservation = new SelectList(type, "id", "name");
+            var typeReserve = _context.TypeReservation.ToList();
+            ViewBag.AllType = new SelectList(typeReserve, "Id", "Name");
             return View();
         }
 
@@ -72,7 +71,7 @@ namespace ManagementReservation.Controllers
         public ActionResult Edit(int id)
         {
             var type = _context.TypeReservation.ToList();
-            ViewBag.TypeReservation = new SelectList(type, "id", "name");
+            ViewBag.TypeReservation = new SelectList(type, "Id", "Name");
             var reserve = _context.Reservation.Find(id);
             return View(reserve);
         }

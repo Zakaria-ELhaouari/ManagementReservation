@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ManagementReservation.Migrations
 {
-    public partial class addreservationTabes : Migration
+    public partial class pls : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,17 +23,31 @@ namespace ManagementReservation.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TypeReservation",
+                name: "Roles",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    accessNumber = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    Name = table.Column<string>(type: "varchar(256) CHARACTER SET utf8mb4", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "varchar(256) CHARACTER SET utf8mb4", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TypeReservation", x => x.id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TypeReservation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    AccessNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TypeReservation", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,6 +80,35 @@ namespace ManagementReservation.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    FirstName = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
+                    LastName = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
+                    Class = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    ResCount = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "varchar(256) CHARACTER SET utf8mb4", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "varchar(256) CHARACTER SET utf8mb4", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "varchar(256) CHARACTER SET utf8mb4", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "varchar(256) CHARACTER SET utf8mb4", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roleclaim",
                 columns: table => new
                 {
@@ -84,6 +127,27 @@ namespace ManagementReservation.Migrations
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    ClaimType = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    ClaimValue = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoleClaims_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,26 +175,26 @@ namespace ManagementReservation.Migrations
                 name: "Reservation",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    status = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    cause = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    IdUser = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: true),
-                    IdType = table.Column<int>(type: "int", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Cause = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    TypeReserveId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservation", x => x.id);
+                    table.PrimaryKey("PK_Reservation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservation_TypeReservation_IdType",
-                        column: x => x.IdType,
+                        name: "FK_Reservation_TypeReservation_TypeReserveId",
+                        column: x => x.TypeReserveId,
                         principalTable: "TypeReservation",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservation_User_IdUser",
-                        column: x => x.IdUser,
+                        name: "FK_Reservation_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -206,21 +270,110 @@ namespace ManagementReservation.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    ClaimType = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    ClaimValue = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    ProviderKey = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    UserId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_UserLogins_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    RoleId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    LoginProvider = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    Name = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: false),
+                    Value = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_UserTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Aspnetuserclaim_UserId",
                 table: "Aspnetuserclaim",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservation_IdType",
-                table: "Reservation",
-                column: "IdType",
-                unique: true);
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservation_IdUser",
+                name: "IX_Reservation_TypeReserveId",
                 table: "Reservation",
-                column: "IdUser");
+                column: "TypeReserveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservation_UserId",
+                table: "Reservation",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Roleclaim_RoleId",
@@ -228,8 +381,24 @@ namespace ManagementReservation.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RoleClaims_RoleId",
+                table: "RoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "Roles",
+                column: "NormalizedName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Userlogin_UserId",
                 table: "Userlogin",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserLogins_UserId",
+                table: "UserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -243,6 +412,22 @@ namespace ManagementReservation.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_RoleId",
+                table: "UserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "Users",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "Users",
+                column: "NormalizedUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Usertoken_UserId",
                 table: "Usertoken",
                 column: "UserId");
@@ -254,19 +439,34 @@ namespace ManagementReservation.Migrations
                 name: "Aspnetuserclaim");
 
             migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
                 name: "Reservation");
 
             migrationBuilder.DropTable(
                 name: "Roleclaim");
 
             migrationBuilder.DropTable(
+                name: "RoleClaims");
+
+            migrationBuilder.DropTable(
                 name: "Userlogin");
+
+            migrationBuilder.DropTable(
+                name: "UserLogins");
 
             migrationBuilder.DropTable(
                 name: "Userrole");
 
             migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
                 name: "Usertoken");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
 
             migrationBuilder.DropTable(
                 name: "TypeReservation");
@@ -275,7 +475,13 @@ namespace ManagementReservation.Migrations
                 name: "Role");
 
             migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

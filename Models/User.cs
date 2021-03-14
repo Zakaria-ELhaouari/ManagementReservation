@@ -10,6 +10,7 @@ namespace ManagementReservation.Models
         public User()
         {
             Aspnetuserclaims = new HashSet<Aspnetuserclaim>();
+            Reservations = new HashSet<Reservation>();
             Userlogins = new HashSet<Userlogin>();
             Userroles = new HashSet<Userrole>();
             Usertokens = new HashSet<Usertoken>();
@@ -36,6 +37,7 @@ namespace ManagementReservation.Models
         public int ResCount { get; set; }
 
         public virtual ICollection<Aspnetuserclaim> Aspnetuserclaims { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
         public virtual ICollection<Userlogin> Userlogins { get; set; }
         public virtual ICollection<Userrole> Userroles { get; set; }
         public virtual ICollection<Usertoken> Usertokens { get; set; }

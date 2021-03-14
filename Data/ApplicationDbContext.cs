@@ -28,6 +28,6 @@ namespace ManagementReservation.Data
             builder.Entity<IdentityUserToken<String>>().ToTable("UserTokens");
         }
         public virtual DbSet<Reservation> Reservation { get; set; }
-        public virtual DbSet<TypeReservation> TypeReservation { get; set; }
+        public virtual DbSet<Typereservation> TypeReservation { get; set; }
     }
 }

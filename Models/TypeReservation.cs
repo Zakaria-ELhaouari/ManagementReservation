@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace ManagementReservation.Models
 {
-    public class TypeReservation
+    public partial class Typereservation
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int accessNumber { get; set; }
-        public virtual Reservation Reservation { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int AccessNumber { get; set; }
     }
 }
